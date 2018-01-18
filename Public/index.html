@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>JV Socket App</title>
+    <style>
+      body {
+        background-color: cyan;
+      }
+    </style>
+  </head>
+  <body>
+    <input id="msg" placeholder="Set Your Username">
+    <br>
+    <button onclick="sendMessage()" id="btn">Set Username</button>
+    <br>
+    <p id="dataSpace"></p>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io();
+      var username = false;
+      var msg = document.getElementById('msg');
+      var msgSpace = document.getElementById('dataSpace');
+      socket.on('broadcast', function(data){
+        msgSpace.innerHTML += data.desc + "<br>";
+      });
+      socket.on('val', function(data){
+        if (data.val == false) {
+          msgSpace.innerHTML = "Please Choose another UserName";
+        } else {
+          username = data.val;
+          document.getElementById('btn').innerHTML = "Send Message";
+          msgSpace.innerHTML = "You are logged in as " + username + "<br>";
+          msg.placeholder = "Type your message here";
+        }
+      });
+      function sendMessage() {
+        if (username == false) {
+          socket.emit('setUserName', {username: msg.value});
+        } else {
+          socket.emit('message', {desc:"@"+username+": "+msg.value});
+        }
+          msg.value = "";
+      }
+    </script>
+  </body>
+</html>
