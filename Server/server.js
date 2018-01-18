@@ -5,7 +5,7 @@ const path = require('path');
 const port = process.env.PORT || 3000;
 
 app.get('/', function(req, res) {
-  res.sendFilepath.join(__dirname, '../Public/index.html'));
+  res.sendFile(path.join(__dirname, '../Public/index.html'));
 });
 
 users = [];
