@@ -30,9 +30,10 @@
     <center>
     <div id="dataSpace"></div>
     <br>
-    <input id="msg" placeholder="Set Your Username">
+    <input onkeypress="enter(event)" id="msg" placeholder="Set Your Username">
     <button onclick="sendMessage()" id="btn">Set Username</button>
     </center>
+    <div id="connectedUsers">Connected Users :0</div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io();
@@ -57,6 +58,15 @@
           msg.placeholder = "Type your message here";
         }
       });
+
+      function enter(event) {
+        var key = event.which || event.keyCode;
+        if (key == 13) {
+          sendMessage();
+        }
+      }
+
+
       function sendMessage() {
         if (username == false) {
           socket.emit('setUserName', {username: msg.value});
