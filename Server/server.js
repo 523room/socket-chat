@@ -19,7 +19,7 @@ io.on('connection', function(socket){
   console.log('A user is connected.');
 
   socket.on('disconnect', function (data) {
-    console.log(`${socket.data} is disconnected. ${data}`);
+    console.log(`${socket.data} is disconnected. ${typeof data}`);
   });
 
   socket.on('message', function(data) {
