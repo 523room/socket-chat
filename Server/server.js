@@ -19,14 +19,14 @@ io.on('connection', function(socket){
   console.log('A user is connected.');
 
   socket.on('disconnect', function () {
-    console.log('A user is disconnected.');
+    console.log(`${socket.username} is disconnected.`);
   });
 
   socket.on('message', function(data) {
     io.sockets.emit('broadcast', {desc:data.desc})
     console.log("MESSAGE recieved :", data.desc);
   });
-  
+
   socket.on('setUserName', function(data) {
     console.log('USER sent his preffered username :', data.username);
     if (users.indexOf(data.username)>-1) {
@@ -38,7 +38,7 @@ io.on('connection', function(socket){
       console.log(data.username, ' is already present in users array, INVALID_USERNAME');
     }
   });
-  
+
 });
 
 http.listen(port, function(){

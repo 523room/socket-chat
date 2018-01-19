@@ -4,16 +4,8 @@
     <title>JV Socket App</title>
     <style>
       body {
-        background-color: cyan;
+        background-color: gold;
       }
-      input{
-        margin-top:40px;
-        transform:scale(3);
-}
-      button{
-        margin-top:60px;
-        transform:scale(2);
-}
     </style>
   </head>
   <body>
@@ -48,9 +40,7 @@
           socket.emit('message', {desc:"@"+username+": "+msg.value});
         }
           msg.value = "";
-        alert("MESSAGE SENT");
       }
-      alert("LAST ALERT : ALL UP AND WORKING");
     </script>
   </body>
 </html>
