@@ -36,7 +36,11 @@
       var msg = document.getElementById('msg');
       var msgSpace = document.getElementById('dataSpace');
       socket.on('broadcast', function(data){
-        msgSpace.innerHTML += data.desc + "<br>";
+        if (data.desc.indexOf("<b>@"+username)==0) {
+          msgSpace.innerHTML += '<p align="right">' + data.desc + "</p><br>";
+        } else {
+          msgSpace.innerHTML += '<p align="left">' + data.desc + "</p><br>";
+        }
       });
       socket.on('val', function(data){
         if (data.val == false) {
