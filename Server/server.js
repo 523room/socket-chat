@@ -31,11 +31,11 @@ io.on('connection', function(socket){
     console.log('USER sent his preffered username :', data.username);
     if (users.indexOf(data.username)>-1) {
       socket.emit('val', {val:false});
-      console.log(data.username, ' selected as valid user..');
+      console.log(data.username, ' is already present in users array, INVALID_USERNAME');
     } else {
       socket.emit('val', {val:data.username});
       users.push(data.username);
-      console.log(data.username, ' is already present in users array, INVALID_USERNAME');
+      console.log(data.username, ' selected as valid user..');
     }
   });
 
