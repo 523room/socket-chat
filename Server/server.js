@@ -20,6 +20,7 @@ io.on('connection', function(socket){
 
   socket.on('disconnect', function (data) {
     console.log(`Someone has disconnected. ${data}`);
+    io.sockets.emit('broadcast', {desc:`<i><center>Someone left the chat room...</center></i>`})
   });
 
   socket.on('message', function(data) {
