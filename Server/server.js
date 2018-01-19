@@ -18,8 +18,8 @@ console.log('USERS array declared without any user');
 io.on('connection', function(socket){
   console.log('A user is connected.');
 
-  socket.on('disconnect', function () {
-    console.log(`${socket.username} is disconnected.`);
+  socket.on('disconnect', function (data) {
+    console.log(`${socket.data} is disconnected. ${data}`);
   });
 
   socket.on('message', function(data) {
