@@ -6,14 +6,28 @@
       body {
         background-color: gold;
       }
+      div {
+        text-align:left;
+        height: 50%;
+        width: 50%;
+      }
+      input {
+        width: 35%;
+        font-size: 20px;
+      }
+      button {
+        width: 15%;
+        font-size: 20px;
+      }
     </style>
   </head>
   <body>
+    <center>
+    <div id="dataSpace"></div>
+    <br>
     <input id="msg" placeholder="Set Your Username">
-    <br>
     <button onclick="sendMessage()" id="btn">Set Username</button>
-    <br>
-    <p id="dataSpace"></p>
+    </center>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io();
@@ -30,7 +44,7 @@
           username = data.val;
           socket.emit('broadcast_name', username);
           document.getElementById('btn').innerHTML = "Send Message";
-          msgSpace.innerHTML = "You are logged in as " + username + "<br>";
+          msgSpace.innerHTML = "<center><i>You are logged in as " + username + "<br></i></center>";
           msg.placeholder = "Type your message here";
         }
       });
@@ -38,7 +52,7 @@
         if (username == false) {
           socket.emit('setUserName', {username: msg.value});
         } else {
-          socket.emit('message', {desc:"@"+username+": "+msg.value});
+          socket.emit('message', {desc:"<b>@"+username+":</b> "+msg.value});
         }
           msg.value = "";
       }

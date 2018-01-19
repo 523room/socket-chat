@@ -28,7 +28,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('broadcast_name', function(data) {
-    io.sockets.emit('broadcast', {desc:`${data} logged in.`})
+    io.sockets.emit('broadcast', {desc:`<i><center>${data} logged in.</center></i>`})
   });
 
   socket.on('setUserName', function(data) {
