@@ -27,6 +27,10 @@ io.on('connection', function(socket){
     console.log("MESSAGE recieved :", data.desc);
   });
 
+  socket.on('broadcast_name', function(data) {
+    io.sockets.emit('broadcast', {desc:`${data} logged in.`})
+  });
+
   socket.on('setUserName', function(data) {
     console.log('USER sent his preffered username :', data.username);
     if (users.indexOf(data.username)>-1) {
