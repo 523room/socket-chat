@@ -53,7 +53,7 @@
           username = data.val;
           socket.emit('broadcast_name', username);
           document.getElementById('btn').innerHTML = "Send Message";
-          msgSpace.innerHTML = "<center><i>You are logged in as " + username + "<br></i></center>";
+          msgSpace.innerHTML += "<center><i>You are logged in as " + username + "<br></i></center>";
           msg.placeholder = "Type your message here";
         }
       });
