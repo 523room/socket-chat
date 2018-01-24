@@ -16,7 +16,15 @@ console.log('USERS array declared without any user');
 
 
 io.on('connection', function(socket){
+  socket.on('ipSeConfig', (data) => {
+    var book = users.filter((user) => user.username === data);
+    console.log(book);
+    socket.emit('val', {val:book[0]});
+  });
   console.log('A user is connected.');
+
+  var allConnectedClients = Object.keys(io.sockets.connected);
+  var clientsCount = io.engine.clientsCount;
 
   socket.on('disconnect', function (data) {
     console.log(`Someone has disconnected. ${data}`);
@@ -39,15 +47,14 @@ io.on('connection', function(socket){
       console.log(data.username, ' is already present in users array, INVALID_USERNAME');
     } else {
       socket.emit('val', {val:data.username});
-      users.push(data.username);
-      console.log(data.username, ' selected as valid user..');
+      users.push(data);
+      console.log(data.username, ' selected as valid user, with ip ', data.ip);
     }
   });
-
 });
 
 http.listen(port, function(){
   console.log(`Listening on Port no.${port}`);
-})
+});
 
 console.log('OUT OF THE PROGRAM : LAST LOG');

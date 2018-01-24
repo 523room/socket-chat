@@ -38,8 +38,51 @@
     <script>
       var socket = io();
       var username = false;
+      var ipAdd = "";
       var msg = document.getElementById('msg');
       var msgSpace = document.getElementById('dataSpace');
+
+
+function getUserIP(onNewIP) {
+    var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+    var pc = new myPeerConnection({
+        iceServers: []
+    }),
+    noop = function() {},
+    localIPs = {},
+    ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
+    key;
+
+    function iterateIP(ip) {
+        if (!localIPs[ip]) onNewIP(ip);
+        localIPs[ip] = true;
+    }
+
+     //create a bogus data channel
+    pc.createDataChannel("");
+
+    // create offer and set local description
+    pc.createOffer().then(function(sdp) {
+        sdp.sdp.split('\n').forEach(function(line) {
+            if (line.indexOf('candidate') < 0) return;
+            line.match(ipRegex).forEach(iterateIP);
+        });
+
+        pc.setLocalDescription(sdp, noop, noop);
+    }).catch(function(reason) {
+        // An error occurred, so handle the failure to connect
+    });
+
+    //listen for candidate events
+    pc.onicecandidate = function(ice) {
+        if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
+        ice.candidate.candidate.match(ipRegex).forEach(iterateIP);
+    };
+}
+getUserIP(function(ipip){
+  ipAdd = ipip;
+});
+      socket.emit('ipSeConfig', ipAdd);
       socket.on('broadcast', function(data){
         if (data.desc.indexOf("<b>@"+username)==0) {
           msgSpace.innerHTML += '<p align="right">' + data.desc + "</p><br>";
@@ -66,10 +109,10 @@
         }
       }
 
-
       function sendMessage() {
+      alert(msg.value);
         if (username == false) {
-          socket.emit('setUserName', {username: msg.value});
+          socket.emit('setUserName', {username: msg.value, ip:ipAdd});
         } else {
           socket.emit('message', {desc:"<b>@"+username+":</b> "+msg.value});
         }
