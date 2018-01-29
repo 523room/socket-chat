@@ -17,9 +17,9 @@ console.log('USERS array declared without any user');
 
 io.on('connection', function(socket){
   socket.on('ipSeConfig', (data) => {
-    var book = users.filter((user) => user.username === data);
+    var book = users.filter((user) => user.ip == data);
     console.log(book);
-    if (book.length) {
+    if (book.length == 0) {
       socket.emit('val', {val:false});
     } else {
       socket.emit('val', {val:book[0]});

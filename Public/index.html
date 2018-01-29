@@ -92,7 +92,7 @@ getUserIP(function(ipip){
       });
       socket.on('val', function(data){
         if (data.val == false) {
-          msgSpace.innerHTML = "Please Choose another UserName";
+          msgSpace.innerHTML = "Please Choose a UserName";
         } else {
           username = data.val;
           socket.emit('broadcast_name', username);
