@@ -19,7 +19,11 @@ io.on('connection', function(socket){
   socket.on('ipSeConfig', (data) => {
     var book = users.filter((user) => user.username === data);
     console.log(book);
-    socket.emit('val', {val:book[0]});
+    if (book.length) {
+      socket.emit('val', {val:false});
+    } else {
+      socket.emit('val', {val:book[0]});
+    }
   });
   console.log('A user is connected.');
 
