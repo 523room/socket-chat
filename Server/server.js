@@ -16,25 +16,27 @@ console.log('USERS array declared without any user');
 
 
 io.on('connection', function(socket){
-  socket.on('ipSeConfig', (data) => {
-    var book = users.filter((user) => user.ip == data);
-    console.log(book);
-    if (book.length == 0) {
-      socket.emit('val', {val:false});
-    } else {
-      socket.emit('val', {val:book[0]});
-    }
-  });
+  // socket.on('ipSeConfig', (data) => {
+  //   var book = users.filter((user) => user.ip == data);
+  //   console.log(book);
+  //   if (book.length == 0) {
+  //     socket.emit('val', {val:false});
+  //   } else {
+  //     socket.emit('val', {val:book[0]});
+  //   }
+  // });
   console.log('A user is connected.');
 
   var allConnectedClients = Object.keys(io.sockets.connected);
   var clientsCount = io.engine.clientsCount;
-
   socket.on('disconnect', function (data) {
     console.log(`Someone has disconnected. ${data}`);
     io.sockets.emit('broadcast', {desc:`<i><center>Someone left the chat room...</center></i>`})
   });
-
+  setInterval(function() {
+    clientsCount = io.engine.clientsCount;
+    io.sockets.emit('ClientNo', clientsCount);
+  }, 1000);
   socket.on('message', function(data) {
     io.sockets.emit('broadcast', {desc:data.desc})
     console.log("MESSAGE recieved :", data.desc);
