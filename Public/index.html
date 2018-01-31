@@ -33,7 +33,7 @@
     <input onkeypress="enter(event)" id="msg" placeholder="Set Your Username">
     <button onclick="sendMessage()" id="btn">Set Username</button>
     </center>
-    <div id="connectedUsers">Connected Users :0</div>
+    <div id="connectedUsers">Connected Users :0<br>Made By:Vedant and Jay</div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
       var socket = io();
@@ -56,7 +56,7 @@
         }
       });
       socket.on('ClientNo', (data) => {
-        document.getElementById('connectedUsers').innerHTML = "Connected Users :" + data;
+        document.getElementById('connectedUsers').innerHTML = "Connected Users :" + data + "<br>Made By:Vedant and Jay";
       });
       socket.on('val', function(data){
         if (data.val == false) {
