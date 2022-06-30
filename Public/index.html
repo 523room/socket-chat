@@ -1,90 +1,112 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>JV Socket App</title>
     <style>
-      body {
-        background-color: gold;
-      }
-      div {
-        text-align:left;
-        height: 50%;
-        width: 50%;
-        font-size: 15px;
-        background-color: gold;
-      }
-      input {
-        width: 35.1%;
-        font-size: 15px;
-      }
-      button {
-        width: 15%;
-        font-size: 10px;
-      }
-      p {
-        background-color: gold;
-      }
+        body {
+            background-color: grey;
+        }
+        
+        div {
+            text-align: left;
+            height: 50%;
+            width: 50%;
+            font-size: 15px;
+            background-color: grey;
+        }
+        
+        input {
+            width: 35.1%;
+            font-size: 15px;
+        }
+        
+        button {
+            width: 15%;
+            font-size: 10px;
+        }
+        
+        p {
+            background-color: grey;
+        }
+        
+        .message {
+            background-color: aliceblue;
+            border: 1px solid black;
+            border-radius: 4px;
+            width: auto;
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <center>
-    <div id="dataSpace"></div>
-    <br>
-    <input onkeypress="enter(event)" id="msg" placeholder="Set Your Username">
-    <button onclick="sendMessage()" id="btn">Set Username</button>
+        <div id="dataSpace">
+
+            <p align="right" class="message">' + data.desc + "</p><br>
+        </div>
+        <br>
+        <input onkeypress="enter(event)" id="msg" placeholder="Set Your Username">
+        <button onclick="sendMessage()" id="btn">Set Username</button>
     </center>
     <div id="connectedUsers">Connected Users :0<br>Made By:Vedant and Jay</div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      var socket = io();
-      var username = false;
-      var ipAdd = "";
-      var msg = document.getElementById('msg');
-      var msgSpace = document.getElementById('dataSpace');
+        var socket = io();
+        var username = false;
+        var ipAdd = "";
+        var msg = document.getElementById('msg');
+        var msgSpace = document.getElementById('dataSpace');
 
-      //
-      // $.getJSON('http://ipinfo.io', function(data){
-      //   alert(data);
-      // });
-      //
-      // socket.emit('ipSeConfig', ipAdd);
-      socket.on('broadcast', function(data){
-        if (data.desc.indexOf("<b>@"+username)==0) {
-          msgSpace.innerHTML += '<p align="right">' + data.desc + "</p><br>";
-        } else {
-          msgSpace.innerHTML += '<p align="left">' + data.desc + "</p><br>";
-        }
-      });
-      socket.on('ClientNo', (data) => {
-        document.getElementById('connectedUsers').innerHTML = "Connected Users :" + data + "<br>Made By:Vedant and Jay";
-      });
-      socket.on('val', function(data){
-        if (data.val == false) {
-          msgSpace.innerHTML = "Please Choose a UserName";
-        } else {
-          username = data.val;
-          socket.emit('broadcast_name', username);
-          document.getElementById('btn').innerHTML = "Send Message";
-          msgSpace.innerHTML += "<center><i>You are logged in as " + username + "<br></i></center>";
-          msg.placeholder = "Type your message here";
-        }
-      });
+        //
+        // $.getJSON('http://ipinfo.io', function(data){
+        //   alert(data);
+        // });
+        //
+        // socket.emit('ipSeConfig', ipAdd);
+        socket.on('broadcast', function(data) {
+            if (data.desc.indexOf("<b>@" + username) == 0) {
+                msgSpace.innerHTML += '<p align="right" class="message">' + data.desc + "</p><br>";
+            } else {
+                msgSpace.innerHTML += '<p align="left" class="message">' + data.desc + "</p><br>";
+            }
+        });
+        socket.on('ClientNo', (data) => {
+            document.getElementById('connectedUsers').innerHTML = "Connected Users :" + data + "<br>Made By:Vedant and Jay";
+        });
+        socket.on('val', function(data) {
+            if (data.val == false) {
+                msgSpace.innerHTML = "Please Choose a UserName";
+            } else {
+                username = data.val;
+                socket.emit('broadcast_name', username);
+                document.getElementById('btn').innerHTML = "Send Message";
+                msgSpace.innerHTML += "<center><i>You are logged in as " + username + "<br></i></center>";
+                msg.placeholder = "Type your message here";
+            }
+        });
 
-      function enter(event) {
-        var key = event.which || event.keyCode;
-        if (key == 13) {
-          sendMessage();
+        function enter(event) {
+            var key = event.which || event.keyCode;
+            if (key == 13) {
+                sendMessage();
+            }
         }
-      }
 
-      function sendMessage() {
-        if (username == false) {
-          socket.emit('setUserName', {username: msg.value, ip:ipAdd});
-        } else {
-          socket.emit('message', {desc:"<b>@"+username+":</b> "+msg.value});
+        function sendMessage() {
+            if (username == false) {
+                socket.emit('setUserName', {
+                    username: msg.value,
+                    ip: ipAdd
+                });
+            } else {
+                socket.emit('message', {
+                    desc: "<b>@" + username + ":</b> " + msg.value
+                });
+            }
+            msg.value = "";
         }
-          msg.value = "";
-      }
     </script>
-  </body>
+</body>
+
 </html>
